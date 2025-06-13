@@ -18,12 +18,23 @@ export default function EmployeeHome() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (typeof window === "undefined") return;
+
+        const token = localStorage.getItem("token");
+        if (!token) {
+          setError("Token not found");
+          return;
+        }
+
         // Fetch courses
-        const coursesResponse = await fetch("https://file-system-black.vercel.app/links/get-employee-links", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const coursesResponse = await fetch(
+          "https://file-system-black.vercel.app/links/get-employee-links",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         if (!coursesResponse.ok) {
           throw new Error("Failed to fetch courses");
@@ -32,7 +43,7 @@ export default function EmployeeHome() {
         const coursesData = await coursesResponse.json();
         setCourses(coursesData.links);
 
-        // Fetch employee profile to get employee ID
+        // Fetch employee profile
         const profileResponse = await axios.get(
           "https://file-system-black.vercel.app/user/employee-Profile",
           {
@@ -43,9 +54,9 @@ export default function EmployeeHome() {
         );
 
         const employeeId = profileResponse.data.employee._id;
-        
-        // Fetch notes using employee ID
-        await getEmployeeNotes(employeeId);
+
+        // Fetch notes
+        await getEmployeeNotes(employeeId, token);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -57,11 +68,13 @@ export default function EmployeeHome() {
     fetchData();
   }, []);
 
-  const getEmployeeNotes = async (employeeId) => {
+  const getEmployeeNotes = async (employeeId, token) => {
     try {
       const response = await axios.get(
         `https://file-system-black.vercel.app/notes/employee-notes/${employeeId}`,
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       setNotes(response.data.notes || []);
     } catch (error) {
@@ -90,11 +103,9 @@ export default function EmployeeHome() {
         <div className="bg-white shadow-lg rounded-2xl p-8">
           <div className="flex justify-center items-center gap-3 mb-4">
             <LuNotebookPen className="text-4xl text-Royal-Green" />
-            <h1 className="text-3xl font-bold text-Royal-Blue">
-              Notes
-            </h1>
+            <h1 className="text-3xl font-bold text-Royal-Blue">Notes</h1>
           </div>
-          
+
           {notesLoading ? (
             <div className="flex justify-center items-center py-4">
               <FaSpinner className="animate-spin text-2xl text-Royal-Green" />
@@ -106,13 +117,14 @@ export default function EmployeeHome() {
           ) : (
             <div className="space-y-4">
               {notes.map((note) => (
-                <div key={note._id} className="border border-gray-200 rounded-lg p-4">
+                <div
+                  key={note._id}
+                  className="border border-gray-200 rounded-lg p-4"
+                >
                   <h3 className="text-xl font-semibold text-Royal-Blue mb-2">
                     {note.title}
                   </h3>
-                  <p className="text-Midnight-Green">
-                    {note.content}
-                  </p>
+                  <p className="text-Midnight-Green">{note.content}</p>
                   <div className="text-sm text-gray-500 mt-2">
                     Created at: {new Date(note.createdAt).toLocaleDateString()}
                   </div>
@@ -126,9 +138,7 @@ export default function EmployeeHome() {
 
         {/* Courses Section */}
         <div className="bg-white shadow-md rounded-2xl p-6 border border-gray-200">
-          <h2 className="text-xl font-semibold text-Royal-Blue mb-6">
-            Apps
-          </h2>
+          <h2 className="text-xl font-semibold text-Royal-Blue mb-6">Apps</h2>
 
           {loading ? (
             <div className="flex justify-center items-center py-10">
