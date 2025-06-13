@@ -1,0 +1,62 @@
+@import "tailwindcss";
+
+:root {
+  --Royal-Green: #006937;
+  --Royal-Blue: #002856;
+  --Sky-Blue: #0082ca;
+  --Midnight-Green: #000129;
+  --Vision-Blue: #80cbec;
+  --Wadi: #b6dfff;
+}
+.text-Royal-Green {
+  color: var(--Royal-Green);
+}
+.bg-Royal-Green {
+  background-color: var(--Royal-Green);
+}
+.border-Royal-Green {
+  border-color: var(--Royal-Green);
+}
+.text-Royal-Blue {
+  color: var(--Royal-Blue);
+}
+.bg-Royal-Blue {
+  background-color: var(--Royal-Blue);
+}
+.text-Sky-Blue {
+  color: var(--Sky-Blue);
+}
+.bg-Sky-Blue {
+  background-color: var(--Sky-Blue);
+}
+.text-Midnight-Green {
+  color: var(--Midnight-Green);
+}
+.bg-Midnight-Green {
+  background-color: var(--Midnight-Green);
+}
+.text-Vision-Blue {
+  color: var(--Vision-Blue);
+}
+.bg-Vision-Blue {
+  background-color: var(--Vision-Blue);
+}
+.text-Wadi {
+  color: var(--Wadi);
+}
+.bg-Wadi {
+  background-color: var(--Wadi);
+}
+button{
+  cursor: pointer;
+}
+/* لإزالة الأسهم من إدخال الأرقام في جميع المتصفحات */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* لمتصفح Firefox */
+}
